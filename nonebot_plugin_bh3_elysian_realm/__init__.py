@@ -1,0 +1,40 @@
+from nonebot import on_command
+from nonebot.adapters.onebot.v11 import Bot, Event, Message
+from nonebot.internal.matcher import Matcher
+from nonebot.internal.params import ArgPlainText
+from nonebot.params import CommandArg
+from nonebot.permission import SUPERUSER
+from nonebot.plugin import PluginMetadata
+
+__plugin_meta__ = PluginMetadata(
+    name="乐土攻略",
+    description="乐土攻略",
+    type="application",
+    usage=f"""
+    [XX乐土] 指定角色乐土攻略
+    [乐土更新] 更新乐土攻略
+    """.strip(),
+    extra={
+        "author": "BalconyJH <balconyjh@gmail.com>",
+    },
+    supported_adapters={
+        "~onebot.v11",
+        "~onebot.v12",
+    },
+)
+
+from nonebot.typing import T_State
+
+elysian_realm = on_command("乐土攻略", aliases={"乐土", "乐土攻略"}, priority=7)
+update_elysian_realm = on_command("乐土更新", aliases={"乐土更新"}, priority=7, permission=SUPERUSER)
+
+
+@elysian_realm.handle()
+async def handle_function(matcher: Matcher, args: Message = CommandArg()):
+    if args.extract_plain_text():
+        matcher.set_arg("role", args)
+
+
+@elysian_realm.got("role", prompt="请指定角色")
+async def got_introduction(role: str = ArgPlainText()):
+    await elysian_realm.finish(f"指定的角色是{role}")
