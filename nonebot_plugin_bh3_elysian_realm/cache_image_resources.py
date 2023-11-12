@@ -1,13 +1,9 @@
 import asyncio
-import io
 import os
 import re
 import subprocess
-import sys
-import zipfile
 # from nonebot import get_driver
 
-import httpx
 from tqdm import tqdm
 
 
@@ -15,7 +11,6 @@ from tqdm import tqdm
 
 
 async def git_pull():
-    repository_url = "https://github.com/MskTmi/ElysianRealm-Data"  # 请替换为实际的 Git 仓库 URL
     clone_command = ["git", "pull"]
     repo_dir = "resources/images"
 
@@ -41,7 +36,7 @@ async def git_pull():
                         pbar.set_postfix_str(f"下载速度: {speed}")
                     pbar.update()  # 更新进度条
 
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         pass
 
 
@@ -56,7 +51,7 @@ async def git_clone():
             with tqdm(desc="仓库克隆中") as pbar:
                 for line in process.stderr:  # git clone 的进度信息在 stderr 中
                     if "fatal: destination path" in line:
-                        print(f"data目录下已存在ElysianRealm-Data, 请勿重复获取")
+                        print("data目录下已存在ElysianRealm-Data, 请勿重复获取")
                         break
                     speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
                     if speed_match:

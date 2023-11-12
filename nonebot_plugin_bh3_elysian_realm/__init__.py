@@ -1,5 +1,5 @@
 from nonebot import on_command
-from nonebot.adapters.onebot.v11 import Bot, Event, Message
+from nonebot.adapters.onebot.v11 import Message
 from nonebot.internal.matcher import Matcher
 from nonebot.internal.params import ArgPlainText
 from nonebot.params import CommandArg
@@ -10,7 +10,7 @@ __plugin_meta__ = PluginMetadata(
     name="乐土攻略",
     description="乐土攻略",
     type="application",
-    usage=f"""
+    usage="""
     [XX乐土] 指定角色乐土攻略
     [乐土更新] 更新乐土攻略
     """.strip(),
@@ -23,7 +23,6 @@ __plugin_meta__ = PluginMetadata(
     },
 )
 
-from nonebot.typing import T_State
 
 elysian_realm = on_command("乐土攻略", aliases={"乐土", "乐土攻略"}, priority=7)
 update_elysian_realm = on_command("乐土更新", aliases={"乐土更新"}, priority=7, permission=SUPERUSER)

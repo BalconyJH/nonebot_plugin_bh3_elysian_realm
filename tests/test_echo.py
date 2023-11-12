@@ -1,8 +1,6 @@
-from datetime import datetime
 
 import pytest
-import nonebot
-from nonebot.adapters.onebot.v11 import Adapter as V11Adapter, MessageEvent, Message
+from nonebot.adapters.onebot.v11 import MessageEvent, Message
 from nonebot.adapters.onebot.v11.event import Sender
 from nonebug import App
 
