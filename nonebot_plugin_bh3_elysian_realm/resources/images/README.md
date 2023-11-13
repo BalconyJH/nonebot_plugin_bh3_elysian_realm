@@ -35,6 +35,7 @@
 | Cabbage.jpg | 时帆旅人 |
 | ShigureKira.jpg | 时雨绮罗 |
 | ShigureKira_Branch.jpg | 时雨绮 |
+| Sentience_brick.jpg | 识律板砖流 |
 | Sentience.jpg | 识之律者 |
 | First_Branch.jpg | 始源分支流 |
 | First.jpg | 始源之律者 |
@@ -46,8 +47,8 @@
 | Helical.jpg | 维尔薇 |
 | Sirin_Attack.jpg | 西琳普攻流 |
 | Sirin_Branch.jpg | 西琳蓄力流 |
-| Flamescion.jpg | 薪炎之律者 |
-| Starchasm.jpg | 魇夜星渊|
+| Flamescion.jpg | 薪炎之律者|
+| Starchasm.jpg | 魇夜星渊 |
 | Golden.jpg | 伊甸 |
 | ShadowKnight.jpg | 影骑士 · 月轮 |
 | Dreamweaver.jpg | 羽兔 |
@@ -55,7 +56,7 @@
 | Moment.jpg | 御神装 · 勿忘 |
 | LunaKindred.jpg | 月下初拥 |
 | TheresaLuna_Attack.jpg | 月下普攻流 |
-| TheresaLuna.jpg | 月下誓约 |
+| TheresaLuna_Weapon.jpg | 月下武器流 |
 | Eclipse.jpg | 真红骑士 · 月蚀 |
 | Eclipse_Branch.jpg | 真红蓄力流 |
 | Truth.jpg | 真理之律者 |
@@ -63,6 +64,7 @@
 | TerminalAide0017.jpg | 终末协理0017 |
 | Finally_Branch.jpg | 终焉分支流 |
 | Finally.jpg | 终焉之律者 |
+
 
 > 图片素材来源于崩坏3通讯中心（月光中心），仅供交流学习使用
 

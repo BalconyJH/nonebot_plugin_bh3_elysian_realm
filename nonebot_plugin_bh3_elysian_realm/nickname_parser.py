@@ -1,11 +1,10 @@
-import asyncio
 import json
 from pathlib import Path
 
 Path = Path(__file__).parent / "resources" / "nickname.json"
 
 
-async def find_key_by_value(json_file, value):
+async def find_key_by_value(json_file, value) -> str | None:
     """
     从 JSON 文件中查找给定值对应的键。
 
@@ -30,7 +29,3 @@ async def find_key_by_value(json_file, value):
     except json.JSONDecodeError:
         print(f"文件 {json_file} 不是有效的 JSON 格式。")
         return None
-
-
-if __name__ == "__main__":
-    print(asyncio.run(find_key_by_value(Path, "月下誓约普攻流")))
