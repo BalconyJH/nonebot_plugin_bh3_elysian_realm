@@ -32,7 +32,7 @@ adapters = [
 ]
 plugins = ["nonebot_plugin_bh3_elysian_realm"]
 plugin_dirs = []
-builtin_plugins = ["echo"]
+builtin_plugins = []
 
 [tool.pdm.dev-dependencies]
 test = [

@@ -1,11 +1,8 @@
-from pathlib import Path
 
-import nonebot
 from nonebot import require, get_driver
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 from nonebot_plugin_bh3_elysian_realm.utils import on_startup
-
 require("nonebot_plugin_localstore")
 require("nonebot_plugin_saa")
 
