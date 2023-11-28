@@ -1,3 +1,6 @@
+from pathlib import Path
+
+import nonebot
 from nonebot import require, get_driver
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
