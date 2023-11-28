@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
-content_hash = "sha256:4c3c76d9533fcebde8040c1cc185bfaf3f709f4a049277fca98fc63282a4c70c"
+content_hash = "sha256:61e3408530a16f62fc35a9e0d5c40bacdd3eca2df2a86ae4f2858d604bd13ffc"
 
 [[package]]
 name = "anyio"
@@ -491,6 +491,20 @@ files = [
 ]
 
 [[package]]
+name = "nonebot-plugin-localstore"
+version = "0.5.1"
+requires_python = ">=3.8,<4.0"
+summary = "Local Storage Support for NoneBot2"
+dependencies = [
+    "nonebot2<3.0.0,>=2.0.0",
+    "typing-extensions>=4.0.0",
+]
+files = [
+    {file = "nonebot_plugin_localstore-0.5.1-py3-none-any.whl", hash = "sha256:520c4dd42f00495ec8fc458c40c5877bc604556f58147c34c4051860df34575b"},
+    {file = "nonebot_plugin_localstore-0.5.1.tar.gz", hash = "sha256:97491d213d419de3f76f941a8d80ab190aa9828950289ec83402028e0f0892eb"},
+]
+
+[[package]]
 name = "nonebot-plugin-send-anything-anywhere"
 version = "0.3.2"
 requires_python = ">=3.8,<4.0"
@@ -508,7 +522,7 @@ files = [
 
 [[package]]
 name = "nonebot2"
-version = "2.1.1"
+version = "2.1.2"
 requires_python = ">=3.8,<4.0"
 summary = "An asynchronous python bot framework."
 dependencies = [
@@ -519,8 +533,8 @@ dependencies = [
     "yarl<2.0.0,>=1.7.2",
 ]
 files = [
-    {file = "nonebot2-2.1.1-py3-none-any.whl", hash = "sha256:fe780eee116b2798e1db043b92aefa1b1f2bf1026725388a1dbbb211bbb4ef4b"},
-    {file = "nonebot2-2.1.1.tar.gz", hash = "sha256:e3937c28bca26f2f8717fedd8594e0cfc79faa2d99a3209c4a63706727d700f8"},
+    {file = "nonebot2-2.1.2-py3-none-any.whl", hash = "sha256:a4df78e4c8b81773ea70b4b68d4ac3a5027d69517661d756772f11edf3cd3b1f"},
+    {file = "nonebot2-2.1.2.tar.gz", hash = "sha256:afb3c141c67645cd038125287d0583aec2220eca998a8392e42ba87722f6659f"},
 ]
 
 [[package]]
