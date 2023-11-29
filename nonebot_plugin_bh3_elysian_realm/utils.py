@@ -82,9 +82,9 @@ async def git_pull():
     try:
         with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
             if "Already up to date." in process.stdout.read():
-                logger.info("ElysianRealm-Data已是最新版本")
+                logger.info("图片资源已是最新版本")
             else:
-                logger.info("ElysianRealm-Data开始更新")
+                logger.info("图片资源开始更新")
                 with tqdm(desc="更新中") as pbar:
                     for line in process.stderr:
                         speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
@@ -92,18 +92,23 @@ async def git_pull():
                             speed = speed_match.group(1)
                             pbar.set_postfix_str(f"下载速度: {speed}")
                         pbar.update()
+                logger.info("图片资源更新完成")
 
     except subprocess.CalledProcessError:
-        logger.error("资源更新异常")
+        logger.error("图片资源更新异常")
 
 
 async def git_clone(repository_url: str = plugin_config.image_repository):
-    clone_command = ["git", "clone", "--progress", "--depth=4", repository_url, plugin_config.image_path]
+    clone_command = ["git", "clone", "--progress", "--depth=1", repository_url, plugin_config.image_path]
 
     try:
+        # 检查目录内.gitkeep文件是否存在
+        if os.path.exists(plugin_config.image_path / ".gitkeep"):
+            os.remove(plugin_config.image_path / ".gitkeep")
         with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
             with tqdm(desc="克隆中") as pbar:
                 for line in process.stderr:
+                    print(line)
                     speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
                     if speed_match:
                         speed = speed_match.group(1)
@@ -153,10 +158,12 @@ async def contrast_repository_url(repository_url: str, path: Path) -> bool:
             .strip()
             .decode("utf-8")
         )
-
         if remote_url == repository_url:
+            logger.debug(f"远程仓库地址与目录下仓库地址匹配")
             return True
         else:
+            logger.debug(f"远程仓库地址: {remote_url}")
+            logger.debug(f"本地仓库地址: {repository_url}")
             return False
     except subprocess.CalledProcessError:
         return False
@@ -206,6 +213,9 @@ class ResourcesVerify:
 
     @staticmethod
     async def verify_images():
+        logger.debug("开始检查图片资源")
+        logger.debug(f"图片仓库地址: {plugin_config.image_repository}")
+        logger.debug(f"图片仓库路径: {plugin_config.image_path}")
         if await contrast_repository_url(plugin_config.image_repository, plugin_config.image_path):
             await git_pull()
         else:
