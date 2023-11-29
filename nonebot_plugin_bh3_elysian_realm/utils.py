@@ -1,12 +1,12 @@
-import asyncio
-import json
 import os
 import re
+import json
+import asyncio
 import subprocess
 from pathlib import Path
 
-from nonebot import logger
 from tqdm import tqdm
+from nonebot import logger
 
 from .config import plugin_config
 
@@ -149,10 +149,11 @@ async def contrast_repository_url(repository_url: str, path: Path) -> bool:
     original_cwd = Path.cwd()
     try:
         os.chdir(path)
-        remote_url = subprocess.check_output(
-            ["git", "config", "--get", "remote.origin.url"],
-            stderr=subprocess.STDOUT
-        ).strip().decode("utf-8")
+        remote_url = (
+            subprocess.check_output(["git", "config", "--get", "remote.origin.url"], stderr=subprocess.STDOUT)
+            .strip()
+            .decode("utf-8")
+        )
 
         if remote_url == repository_url:
             return True
@@ -201,8 +202,7 @@ class ResourcesVerify:
             else:
                 logger.warning(f"nickname.json缺少以下角色:{cache}")
                 save_json(
-                    plugin_config.nickname_path,
-                    await update_nickname(self.nickname_cache, {key: [] for key in cache})
+                    plugin_config.nickname_path, await update_nickname(self.nickname_cache, {key: [] for key in cache})
                 )
 
     @staticmethod
@@ -215,7 +215,4 @@ class ResourcesVerify:
 
 async def on_startup():
     """启动前检查"""
-    await asyncio.gather(
-        ResourcesVerify.verify_images(),
-        ResourcesVerify().verify_nickname()
-    )
+    await asyncio.gather(ResourcesVerify.verify_images(), ResourcesVerify().verify_nickname())

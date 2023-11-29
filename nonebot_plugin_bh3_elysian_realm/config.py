@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from nonebot import get_driver
-from pydantic import BaseSettings, Extra
+from pydantic import Extra, BaseSettings
 
 
 class Config(BaseSettings, extra=Extra.ignore):

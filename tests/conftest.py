@@ -1,5 +1,5 @@
-import nonebot
 import pytest
+import nonebot
 from nonebot.adapters.onebot.v11 import Adapter as OnebotV11Adapter
 from nonebot.adapters.onebot.v12 import Adapter as OnebotV12Adapter
 

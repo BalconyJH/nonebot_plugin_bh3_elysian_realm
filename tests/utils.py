@@ -4,22 +4,16 @@ from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from nonebot.adapters.onebot.v11 import GroupMessageEvent as GroupMessageEventV11
-    from nonebot.adapters.onebot.v11 import (
-        PrivateMessageEvent as PrivateMessageEventV11,
-    )
-    from nonebot.adapters.onebot.v12 import (
-        ChannelMessageEvent as ChannelMessageEventV12,
-    )
     from nonebot.adapters.onebot.v12 import GroupMessageEvent as GroupMessageEventV12
-    from nonebot.adapters.onebot.v12 import (
-        PrivateMessageEvent as PrivateMessageEventV12,
-    )
+    from nonebot.adapters.onebot.v11 import PrivateMessageEvent as PrivateMessageEventV11
+    from nonebot.adapters.onebot.v12 import ChannelMessageEvent as ChannelMessageEventV12
+    from nonebot.adapters.onebot.v12 import PrivateMessageEvent as PrivateMessageEventV12
 
 
 def fake_group_message_event_v11(**field) -> "GroupMessageEventV11":
-    from nonebot.adapters.onebot.v11 import GroupMessageEvent, Message
-    from nonebot.adapters.onebot.v11.event import Sender
     from pydantic import create_model
+    from nonebot.adapters.onebot.v11.event import Sender
+    from nonebot.adapters.onebot.v11 import Message, GroupMessageEvent
 
     _Fake = create_model("_Fake", __base__=GroupMessageEvent)
 
@@ -49,9 +43,9 @@ def fake_group_message_event_v11(**field) -> "GroupMessageEventV11":
 
 
 def fake_private_message_event_v11(**field) -> "PrivateMessageEventV11":
-    from nonebot.adapters.onebot.v11 import Message, PrivateMessageEvent
-    from nonebot.adapters.onebot.v11.event import Sender
     from pydantic import create_model
+    from nonebot.adapters.onebot.v11.event import Sender
+    from nonebot.adapters.onebot.v11 import Message, PrivateMessageEvent
 
     _Fake = create_model("_Fake", __base__=PrivateMessageEvent)
 
@@ -76,9 +70,9 @@ def fake_private_message_event_v11(**field) -> "PrivateMessageEventV11":
 
 
 def fake_group_message_event_v12(**field) -> "GroupMessageEventV12":
-    from nonebot.adapters.onebot.v12 import GroupMessageEvent, Message
-    from nonebot.adapters.onebot.v12.event import BotSelf
     from pydantic import create_model
+    from nonebot.adapters.onebot.v12.event import BotSelf
+    from nonebot.adapters.onebot.v12 import Message, GroupMessageEvent
 
     _Fake = create_model("_Fake", __base__=GroupMessageEvent)
 
@@ -104,9 +98,9 @@ def fake_group_message_event_v12(**field) -> "GroupMessageEventV12":
 
 
 def fake_private_message_event_v12(**field) -> "PrivateMessageEventV12":
-    from nonebot.adapters.onebot.v12 import Message, PrivateMessageEvent
-    from nonebot.adapters.onebot.v12.event import BotSelf
     from pydantic import create_model
+    from nonebot.adapters.onebot.v12.event import BotSelf
+    from nonebot.adapters.onebot.v12 import Message, PrivateMessageEvent
 
     _Fake = create_model("_Fake", __base__=PrivateMessageEvent)
 
@@ -131,9 +125,9 @@ def fake_private_message_event_v12(**field) -> "PrivateMessageEventV12":
 
 
 def fake_channel_message_event_v12(**field) -> "ChannelMessageEventV12":
-    from nonebot.adapters.onebot.v12 import ChannelMessageEvent, Message
-    from nonebot.adapters.onebot.v12.event import BotSelf
     from pydantic import create_model
+    from nonebot.adapters.onebot.v12.event import BotSelf
+    from nonebot.adapters.onebot.v12 import Message, ChannelMessageEvent
 
     _Fake = create_model("_Fake", __base__=ChannelMessageEvent)
 
@@ -200,4 +194,3 @@ def list_keys_in_dict(dictionary):
     for key in dictionary.keys():
         keys.append(key)
     return keys
-
