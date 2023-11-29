@@ -11,6 +11,7 @@ from nonebot_plugin_bh3_elysian_realm.utils import git_pull, load_json, find_ima
 
 elysian_realm = on_command("乐土攻略", aliases={"乐土", "乐土攻略"}, priority=7)
 update_elysian_realm = on_command("乐土更新", aliases={"乐土更新"}, priority=7, permission=SUPERUSER)
+add_nickname = on_command("添加乐土昵称", aliases={"添加乐土昵称"}, priority=7, permission=SUPERUSER)
 
 
 @elysian_realm.handle()
