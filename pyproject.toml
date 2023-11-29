@@ -1,6 +1,6 @@
 [project]
 name = "nonebot_plugin_bh3_elysian_realm"
-version = "0.1.1"
+version = "0.1.2"
 description = "BH3 Elysian Realm bot power by NoneBot2"
 authors = [
     { name = "BalconyJH", email = "balconyjh@gmail.com" },

@@ -159,7 +159,7 @@ async def contrast_repository_url(repository_url: str, path: Path) -> bool:
             .decode("utf-8")
         )
         if remote_url == repository_url:
-            logger.debug(f"远程仓库地址与目录下仓库地址匹配")
+            logger.debug("远程仓库地址与目录下仓库地址匹配")
             return True
         else:
             logger.debug(f"远程仓库地址: {remote_url}")
