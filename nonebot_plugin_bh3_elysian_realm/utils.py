@@ -1,7 +1,6 @@
 import os
 import re
 import json
-import asyncio
 import subprocess
 from pathlib import Path
 
@@ -215,4 +214,5 @@ class ResourcesVerify:
 
 async def on_startup():
     """启动前检查"""
-    await asyncio.gather(ResourcesVerify.verify_images(), ResourcesVerify().verify_nickname())
+    await ResourcesVerify.verify_images()
+    await ResourcesVerify().verify_nickname()

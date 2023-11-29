@@ -6,6 +6,8 @@ from nonebot_plugin_bh3_elysian_realm.utils import on_startup
 require("nonebot_plugin_localstore")
 require("nonebot_plugin_saa")
 
+from . import plugins  # noqa: F401
+
 driver = get_driver()
 
 __plugin_meta__ = PluginMetadata(
