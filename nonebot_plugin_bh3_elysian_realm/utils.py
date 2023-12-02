@@ -62,12 +62,10 @@ async def list_all_keys(data: dict) -> list[str]:
     return list(data.keys())
 
 
-async def find_image(role: str) -> bytes:
+async def find_image(role: str) -> Path:
     """根据传入的角色名，返回对应的图片"""
-    image_path = plugin_config.image_path / f"{role}.jpg"
-    with open(image_path, "rb") as image_file:
-        image = image_file.read()
-    return image
+    image_path = Path(plugin_config.image_path / f"{role}.jpg")
+    return image_path
 
 
 async def git_pull():

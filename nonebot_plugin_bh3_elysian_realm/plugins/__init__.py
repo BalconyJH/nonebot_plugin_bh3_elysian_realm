@@ -25,7 +25,8 @@ async def got_introduction(role: str = ArgPlainText()):
     nickname = await find_key_by_value(load_json(plugin_config.nickname_path), role)
     if nickname is None:
         msg_builder = saa.Text("未找到指定角色")
-        await msg_builder.finish()
+        await msg_builder.send()
+        await elysian_realm.finish()
     else:
         msg_builder = saa.Image(await find_image(nickname))
         await msg_builder.finish()
