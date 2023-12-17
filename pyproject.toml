@@ -15,10 +15,17 @@ dependencies = [
     "tqdm>=4.66.1",
     "pillow>=10.1.0",
     "nonebot-plugin-localstore>=0.5.1",
+    "nonebot-plugin-apscheduler>=0.3.0",
 ]
 requires-python = ">=3.8.1"
 readme = "README.md"
-license = "AGPL-3.0-or-later"
+license = { text = "AGPL-3.0-or-later"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 
 [build-system]
 requires = ["pdm-backend"]
@@ -28,9 +35,10 @@ build-backend = "pdm.backend"
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" },
 ]
-plugins = ["nonebot_plugin_bh3_elysian_realm"]
+plugins = ["nonebot_plugin_bh3_elysian_realm", "nonebot_plugin_saa", "nonebot_plugin_localstore",
+    "nonebot_plugin_apscheduler"]
 plugin_dirs = []
-builtin_plugins = ["echo"]
+builtin_plugins = []
 
 [tool.pdm.dev-dependencies]
 test = [
@@ -42,6 +50,7 @@ test = [
     "flake8>=6.1.0",
     "nonebot-plugin-sentry>=0.4.1",
     "nonebug-saa>=0.3.1",
+    "nb-cli>=1.2.8",
 ]
 
 [tool.black]
