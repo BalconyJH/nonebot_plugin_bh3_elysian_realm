@@ -6,6 +6,7 @@ from pathlib import Path
 
 from tqdm import tqdm
 from nonebot import logger
+from nonebot_plugin_apscheduler import scheduler
 
 from nonebot_plugin_bh3_elysian_realm.config import plugin_config
 
@@ -60,12 +61,6 @@ async def list_all_keys(data: dict) -> list[str]:
         list[str]: JSON 文件中的所有键。
     """
     return list(data.keys())
-
-
-async def find_image(role: str) -> Path:
-    """根据传入的角色名，返回对应的图片"""
-    image_path = Path(plugin_config.image_path / f"{role}.jpg")
-    return image_path
 
 
 async def git_pull():
@@ -218,6 +213,14 @@ class ResourcesVerify:
             await git_pull()
         else:
             await git_clone()
+
+
+@scheduler.scheduled_job(
+    "interval", seconds=plugin_config.resource_validation_time, id="resource_validation"
+)
+async def resource_scheduled_job():
+    await ResourcesVerify.verify_images()
+    await ResourcesVerify().verify_nickname()
 
 
 async def on_startup():
