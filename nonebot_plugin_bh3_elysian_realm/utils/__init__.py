@@ -50,6 +50,23 @@ async def find_key_by_value(data: dict, value: str) -> str | None:
     return None
 
 
+async def identify_empty_value_keys(data: dict) -> list[str]:
+    """
+    从 dict 中查找值为空的键。
+
+    参数:
+        data (dict): 要查找的 dict。
+
+    返回:
+        list[str]: 找到的键列表。
+    """
+    empty_value_keys = []
+    for key, values in data.items():
+        if not values:
+            empty_value_keys.append(key)
+    return empty_value_keys
+
+
 async def list_all_keys(data: dict) -> list[str]:
     """
     列出 JSON 文件中的所有键。
@@ -198,11 +215,13 @@ class ResourcesVerify:
             cache = list(set(self.jpg_list) - set(await list_all_keys(self.nickname_cache)))
             if not cache:
                 logger.info("nickname.json已是最新版本")
+                return True
             else:
                 logger.warning(f"nickname.json缺少以下角色:{cache}")
                 save_json(
                     plugin_config.nickname_path, await update_nickname(self.nickname_cache, {key: [] for key in cache})
                 )
+                return False
 
     @staticmethod
     async def verify_images():
@@ -215,9 +234,7 @@ class ResourcesVerify:
             await git_clone()
 
 
-@scheduler.scheduled_job(
-    "interval", seconds=plugin_config.resource_validation_time, id="resource_validation"
-)
+@scheduler.scheduled_job("interval", seconds=plugin_config.resource_validation_time, id="resource_validation")
 async def resource_scheduled_job():
     await ResourcesVerify.verify_images()
     await ResourcesVerify().verify_nickname()

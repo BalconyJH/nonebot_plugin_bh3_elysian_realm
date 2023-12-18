@@ -30,9 +30,7 @@ async def got_introduction(nickname: str = ArgPlainText()):
         await msg_builder.send()
         await elysian_realm.finish()
     else:
-        msg_builder = saa.Image(
-            Path(plugin_config.image_path / f"{role}.jpg")
-        )
+        msg_builder = saa.Image(Path(plugin_config.image_path / f"{role}.jpg"))
         await msg_builder.finish()
 
 
