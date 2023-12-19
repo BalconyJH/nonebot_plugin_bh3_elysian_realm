@@ -3,15 +3,18 @@ import re
 import json
 import subprocess
 from pathlib import Path
+from typing import Dict, List, Optional
 
 from tqdm import tqdm
-from nonebot import logger
+import nonebot_plugin_saa as saa
+from nonebot import logger, get_bot
+from nonebot_plugin_saa import TargetQQPrivate
 from nonebot_plugin_apscheduler import scheduler
 
-from nonebot_plugin_bh3_elysian_realm.config import plugin_config
+from nonebot_plugin_bh3_elysian_realm.config import global_config, plugin_config
 
 
-def load_json(json_file) -> dict:
+def load_json(json_file) -> Dict:
     try:
         with open(json_file, encoding="utf-8") as file:
             if os.path.getsize(json_file) == 0:
@@ -23,7 +26,7 @@ def load_json(json_file) -> dict:
         logger.error(f"文件 {json_file} 解码错误。")
 
 
-def save_json(json_file, data: dict):
+def save_json(json_file, data: Dict):
     try:
         with open(json_file, "w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
@@ -33,7 +36,7 @@ def save_json(json_file, data: dict):
         logger.error(f"文件 {json_file} 解码错误。")
 
 
-async def find_key_by_value(data: dict, value: str) -> str | None:
+async def find_key_by_value(data: Dict, value: str) -> Optional[str]:
     """
     从 JSON 文件中查找给定值对应的键。
 
@@ -50,15 +53,15 @@ async def find_key_by_value(data: dict, value: str) -> str | None:
     return None
 
 
-async def identify_empty_value_keys(data: dict) -> list[str]:
+async def identify_empty_value_keys(data: Dict) -> List[str]:
     """
-    从 dict 中查找值为空的键。
+    从 Dict 中查找值为空的键。
 
     参数:
-        data (dict): 要查找的 dict。
+        data (Dict): 要查找的 Dict。
 
     返回:
-        list[str]: 找到的键列表。
+        List[str]: 找到的键列表。
     """
     empty_value_keys = []
     for key, values in data.items():
@@ -67,7 +70,7 @@ async def identify_empty_value_keys(data: dict) -> list[str]:
     return empty_value_keys
 
 
-async def list_all_keys(data: dict) -> list[str]:
+async def list_all_keys(data: Dict) -> List[str]:
     """
     列出 JSON 文件中的所有键。
 
@@ -75,7 +78,7 @@ async def list_all_keys(data: dict) -> list[str]:
         json_file (str): JSON 文件的路径。
 
     返回:
-        list[str]: JSON 文件中的所有键。
+        List[str]: JSON 文件中的所有键。
     """
     return list(data.keys())
 
@@ -91,12 +94,14 @@ async def git_pull():
 
     try:
         with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
-            if "Already up to date." in process.stdout.read():
+            stdout, stderr = process.communicate()
+
+            if "Already up to date." in stdout:
                 logger.info("图片资源已是最新版本")
             else:
                 logger.info("图片资源开始更新")
                 with tqdm(desc="更新中") as pbar:
-                    for line in process.stderr:
+                    for line in stderr.splitlines():
                         speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
                         if speed_match:
                             speed = speed_match.group(1)
@@ -109,16 +114,17 @@ async def git_pull():
 
 
 async def git_clone(repository_url: str = plugin_config.image_repository):
-    clone_command = ["git", "clone", "--progress", "--depth=1", repository_url, plugin_config.image_path]
+    clone_command = ["git", "clone", "--progress", "--depth=4", repository_url, plugin_config.image_path]
 
     try:
-        # 检查目录内.gitkeep文件是否存在
+        if os.path.exists(plugin_config.image_path) and os.listdir(plugin_config.image_path):
+            logger.error(f"目录 {plugin_config.image_path} 不为空")
+            return
         if os.path.exists(plugin_config.image_path / ".gitkeep"):
             os.remove(plugin_config.image_path / ".gitkeep")
         with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
             with tqdm(desc="克隆中") as pbar:
                 for line in process.stderr:
-                    print(line)
                     speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
                     if speed_match:
                         speed = speed_match.group(1)
@@ -181,7 +187,7 @@ async def contrast_repository_url(repository_url: str, path: Path) -> bool:
         os.chdir(original_cwd)
 
 
-def list_jpg_files(directory: str) -> list[str]:
+def list_jpg_files(directory: str) -> List[str]:
     """
     列出指定目录下的所有jpg文件的文件名（不包括子目录）。
 
@@ -189,12 +195,12 @@ def list_jpg_files(directory: str) -> list[str]:
         directory (str): 要搜索的目录。
 
     返回:
-        list: 包含所有找到的jpg文件名的列表。
+        List: 包含所有找到的jpg文件名的列表。
     """
     return [os.path.splitext(file)[0] for file in os.listdir(directory) if file.endswith(".jpg")]
 
 
-async def update_nickname(raw_data: dict, update_data: dict) -> dict:
+async def update_nickname(raw_data: Dict, update_data: Dict) -> Dict:
     """更新nickname.json"""
     for key, value in update_data.items():
         if key not in raw_data:
@@ -212,7 +218,7 @@ class ResourcesVerify:
     async def verify_nickname(self):
         """检查nickname.json是否存在"""
         if self.nickname_cache is not None:
-            cache = list(set(self.jpg_list) - set(await list_all_keys(self.nickname_cache)))
+            cache: List[str] = list(set(self.jpg_list) - set(await list_all_keys(self.nickname_cache)))
             if not cache:
                 logger.info("nickname.json已是最新版本")
                 return True
@@ -240,7 +246,23 @@ async def resource_scheduled_job():
     await ResourcesVerify().verify_nickname()
 
 
+@scheduler.scheduled_job("interval", seconds=plugin_config.resource_validation_time, id="null_nickname_warning")
+async def null_nickname_warning():
+    bot = get_bot()
+    empty_value_list = await identify_empty_value_keys(load_json(plugin_config.nickname_path))
+    if empty_value_list:
+        logger.warning("nickname.json存在空值，请及时更新")
+        logger.debug(f"空值列表: {empty_value_list}")
+        msg_builder = saa.Text(f"nickname.json存在空值，请及时更新\n空值列表: {empty_value_list}")
+        logger.debug(f"superusers: {global_config.superusers}")
+        for superuser in global_config.superusers:
+            msg_target = TargetQQPrivate(user_id=superuser)
+            await msg_builder.send_to(msg_target, bot)
+
+
 async def on_startup():
     """启动前检查"""
     await ResourcesVerify.verify_images()
     await ResourcesVerify().verify_nickname()
+    if await identify_empty_value_keys(load_json(plugin_config.nickname_path)):
+        logger.warning("nickname.json存在没有昵称的图片，请及时更新")

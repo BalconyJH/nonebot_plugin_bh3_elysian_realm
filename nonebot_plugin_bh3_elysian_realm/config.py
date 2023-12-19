@@ -11,4 +11,5 @@ class Config(BaseSettings, extra=Extra.ignore):
     resource_validation_time: int = 60 * 60 * 24
 
 
-plugin_config = Config.parse_obj(get_driver().config)
+global_config = get_driver().config
+plugin_config = Config.parse_obj(global_config)
