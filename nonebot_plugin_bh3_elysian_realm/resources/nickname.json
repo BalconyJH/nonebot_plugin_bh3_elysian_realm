@@ -90,8 +90,8 @@
   ],
   "TheresaLuna_Attack": ["月下誓约普攻流", "大月下普攻流", "大月下2"],
   "Sentience_brick": ["识律2", "识律砖头流", "识律砖头流"],
-  "CosmicExpression_Parry": [],
-  "CosmicExpression_Attack": [],
-  "CosmicExpression_Mixed": [],
-  "Sentience_HoeFlow": []
+  "CosmicExpression_Parry": ["大格蕾修弹反流"],
+  "CosmicExpression_Attack": ["大格蕾修普攻流"],
+  "CosmicExpression_Mixed": ["大格蕾修混合流"],
+  "Sentience_HoeFlow": ["识律锄地流"]
 }

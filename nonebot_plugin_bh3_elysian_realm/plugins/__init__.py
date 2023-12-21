@@ -77,15 +77,14 @@ async def _(state: T_State, filename: str = ArgPlainText("filename"), nickname: 
         await msg_builder.reject_arg("filename")
     elif not state["nickname_cache"][filename]:
         logger.debug("nickname is None")
-        state["nickname_cache"][filename] = nickname
+        state["nickname_cache"][filename] = state["nicknames"]
         save_json(plugin_config.nickname_path, state["nickname_cache"])
         msg_builder = saa.Text(f"已更新\n{filename}: {nickname}")
         await msg_builder.finish()
     else:
-        logger.debug(state["nickname_cache"][filename])
         for nickname in state["nicknames"]:
             state["nickname_cache"][filename].append(nickname)
         logger.debug(state["nickname_cache"][filename])
-        save_json(plugin_config.nickname_path, T_State["nickname_cache"])
+        save_json(plugin_config.nickname_path, state["nickname_cache"])
         msg_builder = saa.Text(f"添加成功\n{filename}: {state['nickname_cache'][filename]}")
         await msg_builder.finish()
