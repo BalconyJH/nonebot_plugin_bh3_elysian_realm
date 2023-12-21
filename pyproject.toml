@@ -82,6 +82,8 @@ mark-parentheses = false
 [tool.pyright]
 pythonVersion = "3.8"
 pythonPlatform = "All"
+venvPath = "."
+venv = ".venv"
 executionEnvironments = [
     { root = "./tests", extraPaths = [
         "./",

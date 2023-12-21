@@ -3,7 +3,7 @@ import re
 import json
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Union, Optional
 
 from tqdm import tqdm
 import nonebot_plugin_saa as saa
@@ -14,7 +14,7 @@ from nonebot_plugin_apscheduler import scheduler
 from nonebot_plugin_bh3_elysian_realm.config import global_config, plugin_config
 
 
-def load_json(json_file) -> Dict:
+def load_json(json_file: Union[str, Path]) -> Dict:
     try:
         with open(json_file, encoding="utf-8") as file:
             if os.path.getsize(json_file) == 0:
@@ -24,6 +24,7 @@ def load_json(json_file) -> Dict:
         logger.error(f"文件 {json_file} 未找到。")
     except json.JSONDecodeError:
         logger.error(f"文件 {json_file} 解码错误。")
+    raise FileNotFoundError
 
 
 def save_json(json_file, data: Dict):
@@ -124,12 +125,13 @@ async def git_clone(repository_url: str = plugin_config.image_repository):
             os.remove(plugin_config.image_path / ".gitkeep")
         with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
             with tqdm(desc="克隆中") as pbar:
-                for line in process.stderr:
-                    speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
-                    if speed_match:
-                        speed = speed_match.group(1)
-                        pbar.set_postfix_str(f"下载速度: {speed}")
-                    pbar.update()
+                if process.stderr is not None:
+                    for line in process.stderr:
+                        speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
+                        if speed_match:
+                            speed = speed_match.group(1)
+                            pbar.set_postfix_str(f"下载速度: {speed}")
+                        pbar.update()
 
         if process.returncode == 0:
             logger.info("乐土攻略获取完成")
@@ -187,7 +189,7 @@ async def contrast_repository_url(repository_url: str, path: Path) -> bool:
         os.chdir(original_cwd)
 
 
-def list_jpg_files(directory: str) -> List[str]:
+def list_jpg_files(directory: Union[str, Path]) -> List[str]:
     """
     列出指定目录下的所有jpg文件的文件名（不包括子目录）。
 
@@ -228,6 +230,9 @@ class ResourcesVerify:
                     plugin_config.nickname_path, await update_nickname(self.nickname_cache, {key: [] for key in cache})
                 )
                 return False
+        else:
+            logger.error("nickname.json不存在")
+            raise FileNotFoundError
 
     @staticmethod
     async def verify_images():
@@ -256,7 +261,7 @@ async def null_nickname_warning():
         msg_builder = saa.Text(f"nickname.json存在空值，请及时更新\n空值列表: {empty_value_list}")
         logger.debug(f"superusers: {global_config.superusers}")
         for superuser in global_config.superusers:
-            msg_target = TargetQQPrivate(user_id=superuser)
+            msg_target = TargetQQPrivate(user_id=int(superuser))
             await msg_builder.send_to(msg_target, bot)
 
 
