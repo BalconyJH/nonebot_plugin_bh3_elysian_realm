@@ -33,7 +33,8 @@ build-backend = "pdm.backend"
 
 [tool.nonebot]
 adapters = [
-    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" },
+    { name = "OneBot V12", module_name = "nonebot.adapters.onebot.v12", project_link = "nonebot-adapter-onebot", desc = "OneBot V12 协议" },
+    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11", project_link = "nonebot-adapter-onebot", desc = "OneBot V11 协议" },
 ]
 plugins = ["nonebot_plugin_bh3_elysian_realm", "nonebot_plugin_saa", "nonebot_plugin_localstore",
     "nonebot_plugin_apscheduler"]
@@ -52,6 +53,8 @@ test = [
     "nonebug-saa>=0.3.1",
     "nb-cli>=1.2.8",
     "pyright>=1.1.341",
+    "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.5.0",
 ]
 
 [tool.black]
@@ -94,3 +97,6 @@ executionEnvironments = [
 typeCheckingMode = "basic"
 reportShadowedImports = false
 disableBytesTypePromotions = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
