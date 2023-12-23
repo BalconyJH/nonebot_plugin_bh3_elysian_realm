@@ -56,10 +56,13 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
 async def _(state: T_State):
     state["nickname_cache"] = load_json(plugin_config.nickname_path)
     empty_value_list = await identify_empty_value_keys(state["nickname_cache"])
+    logger.debug(f"empty_value_list: {empty_value_list}")
     if empty_value_list:
+        logger.debug("nickname.json存在没有昵称的图片")
         msg_builder = saa.Text(f"nickname.json空值列表: {empty_value_list}\n" f"以上为没有昵称的图片文件名")
         await msg_builder.send()
     else:
+        logger.debug("nickname.json不存在没有昵称的图片")
         msg_builder = saa.Text("nickname.json不存在没有昵称的图片")
         await msg_builder.finish()
 
@@ -67,6 +70,8 @@ async def _(state: T_State):
 @add_nickname.got("filename", prompt="缺失昵称的图片文件名")
 @add_nickname.got("nickname", prompt="昵称")
 async def _(state: T_State, filename: str = ArgPlainText("filename"), nickname: str = ArgPlainText("nickname")):
+    logger.debug(f"filename: {filename}\nnickname: {nickname}")
+
     def string_to_list(input_str: str) -> list:
         return [item.strip() for item in input_str.split(",")] if input_str else []
 
