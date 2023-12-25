@@ -165,4 +165,5 @@ cython_debug/
 .vscode/
 
 
+# project
 /nonebot_plugin_bh3_elysian_realm/resources/images/
