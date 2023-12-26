@@ -14,11 +14,12 @@ from nonebot_plugin_apscheduler import scheduler
 from nonebot_plugin_bh3_elysian_realm.config import global_config, plugin_config
 
 
-def load_json(json_file: Union[str, Path]) -> Dict:
+def load_json(json_file: Path) -> Dict:
+    if not json_file.exists() or os.path.getsize(json_file) == 0:
+        logger.warning(f"文件 {json_file} 为空或不存在。")
+        return {}
     try:
-        with json_file.open("w", encoding="utf-8") as file:
-            if os.path.getsize(json_file) == 0:
-                logger.warning(f"文件 {json_file} 为空。")
+        with json_file.open("r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
         logger.error(f"文件 {json_file} 未找到。")
@@ -115,7 +116,7 @@ async def git_pull():
 
 
 async def git_clone(repository_url: str = plugin_config.image_repository):
-    clone_command = ["git", "clone", "--progress", "--depth=4", repository_url, plugin_config.image_path]
+    clone_command = ["git", "clone", "--progress", "--depth=1", repository_url, plugin_config.image_path]
 
     try:
         if os.path.exists(plugin_config.image_path) and os.listdir(plugin_config.image_path):
@@ -132,10 +133,8 @@ async def git_clone(repository_url: str = plugin_config.image_repository):
                             speed = speed_match.group(1)
                             pbar.set_postfix_str(f"下载速度: {speed}")
                         pbar.update()
-
-        if process.returncode == 0:
-            logger.info("乐土攻略获取完成")
-            return None
+                        if "done." in line:
+                            logger.info("乐土攻略获取完成")
 
     except subprocess.CalledProcessError as e:
         error_info = e.stderr
@@ -177,11 +176,11 @@ async def contrast_repository_url(repository_url: str, path: Path) -> bool:
             .decode("utf-8")
         )
         if remote_url == repository_url:
-            logger.debug("远程仓库地址与目录下仓库地址匹配")
+            logger.debug("指定仓库地址与目录下仓库地址匹配")
             return True
         else:
-            logger.debug(f"远程仓库地址: {remote_url}")
-            logger.debug(f"本地仓库地址: {repository_url}")
+            logger.debug(f"目录下仓库地址: {remote_url}")
+            logger.debug(f"指定仓库地址: {repository_url}")
             return False
     except subprocess.CalledProcessError:
         return False
@@ -256,12 +255,14 @@ class ResourcesVerify:
 
 @scheduler.scheduled_job("interval", seconds=plugin_config.resource_validation_time, id="resource_validation")
 async def resource_scheduled_job():
-    await ResourcesVerify.verify_images()
+    logger.debug("开始检查图片资源计划任务")
+    await git_pull()
     await ResourcesVerify().verify_nickname()
 
 
 @scheduler.scheduled_job("interval", seconds=plugin_config.resource_validation_time, id="null_nickname_warning")
 async def null_nickname_warning():
+    logger.debug("开始检查nickname.json空值计划任务")
     bot = get_bot()
     empty_value_list = await identify_empty_value_keys(load_json(plugin_config.nickname_path))
     if empty_value_list:
