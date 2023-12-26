@@ -14,6 +14,7 @@ from nonebot_plugin_bh3_elysian_realm.utils import (
     git_pull,
     load_json,
     save_json,
+    string_to_list,
     find_key_by_value,
     identify_empty_value_keys,
 )
@@ -63,18 +64,13 @@ async def _(state: T_State):
         await msg_builder.send()
     else:
         logger.debug("nickname.json不存在没有昵称的图片")
-        msg_builder = saa.Text("nickname.json不存在没有昵称的图片")
-        await msg_builder.finish()
+        await add_nickname.finish("nickname.json不存在没有昵称的图片")
 
 
 @add_nickname.got("filename", prompt="缺失昵称的图片文件名")
 @add_nickname.got("nickname", prompt="昵称")
 async def _(state: T_State, filename: str = ArgPlainText("filename"), nickname: str = ArgPlainText("nickname")):
     logger.debug(f"filename: {filename}\nnickname: {nickname}")
-
-    def string_to_list(input_str: str) -> list:
-        return [item.strip() for item in input_str.split(",")] if input_str else []
-
     state["filename"] = filename
     state["nicknames"] = string_to_list(nickname)
     if filename not in state["nickname_cache"]:

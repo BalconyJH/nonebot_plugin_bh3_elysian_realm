@@ -16,7 +16,7 @@ from nonebot_plugin_bh3_elysian_realm.config import global_config, plugin_config
 
 def load_json(json_file: Union[str, Path]) -> Dict:
     try:
-        with open(json_file, encoding="utf-8") as file:
+        with json_file.open("w", encoding="utf-8") as file:
             if os.path.getsize(json_file) == 0:
                 logger.warning(f"文件 {json_file} 为空。")
             return json.load(file)
@@ -29,7 +29,7 @@ def load_json(json_file: Union[str, Path]) -> Dict:
 
 def save_json(json_file, data: Dict):
     try:
-        with open(json_file, "w", encoding="utf-8") as file:
+        with json_file.open("w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
     except FileNotFoundError:
         logger.error(f"文件 {json_file} 未找到。")
@@ -200,6 +200,15 @@ def list_jpg_files(directory: Union[str, Path]) -> List[str]:
         List: 包含所有找到的jpg文件名的列表。
     """
     return [os.path.splitext(file)[0] for file in os.listdir(directory) if file.endswith(".jpg")]
+
+
+def string_to_list(input_str: str) -> list:
+    """
+    将使用[,]分割的字符串转换为列表。
+    :param input_str: 输入字符串
+    :return: 列表
+    """
+    return [item.strip() for item in input_str.split(",")] if input_str else []
 
 
 async def update_nickname(raw_data: Dict, update_data: Dict) -> Dict:
