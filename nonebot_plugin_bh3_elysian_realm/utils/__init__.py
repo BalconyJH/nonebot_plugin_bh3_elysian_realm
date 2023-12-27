@@ -85,12 +85,12 @@ async def list_all_keys(data: Dict) -> List[str]:
     return list(data.keys())
 
 
-async def git_pull():
+async def git_pull() -> bool:
     clone_command = ["git", "pull"]
 
     if not os.path.exists(plugin_config.image_path):
         logger.error(f"目录 {plugin_config.image_path} 不存在")
-        return
+        return False
 
     os.chdir(plugin_config.image_path)
 
@@ -100,6 +100,7 @@ async def git_pull():
 
             if "Already up to date." in stdout:
                 logger.info("图片资源已是最新版本")
+                return True
             else:
                 logger.info("图片资源开始更新")
                 with tqdm(desc="更新中") as pbar:
@@ -110,9 +111,11 @@ async def git_pull():
                             pbar.set_postfix_str(f"下载速度: {speed}")
                         pbar.update()
                 logger.info("图片资源更新完成")
+                return True
 
     except subprocess.CalledProcessError:
         logger.error("图片资源更新异常")
+        return False
 
 
 async def git_clone(repository_url: str = plugin_config.image_repository):

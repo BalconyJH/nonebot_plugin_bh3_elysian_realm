@@ -33,11 +33,8 @@ async def handle_first_receive(matcher: Matcher, args: Message = CommandArg()):
 @elysian_realm.got("role", prompt="请指定角色")
 async def got_introduction(role: str = ArgPlainText()):
     nickname = await find_key_by_value(load_json(plugin_config.nickname_path), role)
-    logger.debug(f"role: {role}")
-    if role is None:
-        msg_builder = saa.Text(f"未找到指定角色: {role}")
-        await msg_builder.send()
-        await elysian_realm.finish()
+    if nickname is None:
+        await elysian_realm.finish(f"未找到指定角色: {role}")
     else:
         msg_builder = saa.Image(Path(plugin_config.image_path / f"{nickname}.jpg"))
         await msg_builder.finish()
@@ -45,29 +42,23 @@ async def got_introduction(role: str = ArgPlainText()):
 
 @update_elysian_realm.handle()
 async def _(matcher: Matcher, args: Message = CommandArg()):
-    result = await git_pull()
-    if result is not None:
-        msg_builder = saa.Text(result)
-        await msg_builder.finish()
-    else:
-        await update_elysian_realm.finish("更新成功")
+    await update_elysian_realm.finish("更新成功" if await git_pull() else "更新失败")
 
 
 @add_nickname.handle()
-async def _(state: T_State):
+async def _handle_first_receive(state: T_State):
     state["nickname_cache"] = load_json(plugin_config.nickname_path)
     empty_value_list = await identify_empty_value_keys(state["nickname_cache"])
-    logger.debug(f"empty_value_list: {empty_value_list}")
     if empty_value_list:
         logger.debug("nickname.json存在没有昵称的图片")
-        msg_builder = saa.Text(f"nickname.json空值列表: {empty_value_list}\n" f"以上为没有昵称的图片文件名")
+        msg_builder = saa.Text(f"nickname.json空值列表: {empty_value_list}\n以上为没有昵称的图片文件名")
         await msg_builder.send()
     else:
-        logger.debug("nickname.json不存在没有昵称的图片")
-        await add_nickname.finish("nickname.json不存在没有昵称的图片")
+        msg_builder = saa.Text("nickname.json不存在没有昵称的图片")
+        await msg_builder.send()
 
 
-@add_nickname.got("filename", prompt="缺失昵称的图片文件名")
+@add_nickname.got("filename", prompt="图片文件名")
 @add_nickname.got("nickname", prompt="昵称")
 async def _(state: T_State, filename: str = ArgPlainText("filename"), nickname: str = ArgPlainText("nickname")):
     logger.debug(f"filename: {filename}\nnickname: {nickname}")
@@ -77,7 +68,6 @@ async def _(state: T_State, filename: str = ArgPlainText("filename"), nickname: 
         msg_builder = saa.Text(f"未找到图片文件: {filename}")
         await msg_builder.reject_arg("filename")
     elif not state["nickname_cache"][filename]:
-        logger.debug("nickname is None")
         state["nickname_cache"][filename] = state["nicknames"]
         save_json(plugin_config.nickname_path, state["nickname_cache"])
         msg_builder = saa.Text(f"已更新\n{filename}: {nickname}")
@@ -85,7 +75,6 @@ async def _(state: T_State, filename: str = ArgPlainText("filename"), nickname: 
     else:
         for nickname in state["nicknames"]:
             state["nickname_cache"][filename].append(nickname)
-        logger.debug(state["nickname_cache"][filename])
         save_json(plugin_config.nickname_path, state["nickname_cache"])
         msg_builder = saa.Text(f"添加成功\n{filename}: {state['nickname_cache'][filename]}")
         await msg_builder.finish()
