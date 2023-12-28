@@ -18,7 +18,7 @@ async def test_update_elysian_realm(app: App, mocker: MockerFixture):
     async with app.test_matcher(update_elysian_realm) as ctx:
         adapter = get_adapter(Adapter)
         bot = ctx.create_bot(base=Bot, adapter=adapter, auto_connect=False)
-        message = Message("乐土更新")
+        message = Message("/乐土更新")
         event = fake_group_message_event_v11(message=message, sender={"role": "owner"})
 
         ctx.receive_event(bot, event)
@@ -35,7 +35,7 @@ async def test_none_nickname(app: App, mocker: MockerFixture):
     async with app.test_matcher(elysian_realm) as ctx:
         adapter = get_adapter(Adapter)
         bot = ctx.create_bot(base=Bot, adapter=adapter, auto_connect=False)
-        message = Message("乐土人人")
+        message = Message("/乐土人人")
         event = fake_group_message_event_v11(message=message)
 
         ctx.receive_event(bot, event)
@@ -52,7 +52,7 @@ async def test_elysian_realm(app: App, mocker: MockerFixture):
     async with app.test_matcher(elysian_realm) as ctx:
         adapter = get_adapter(Adapter)
         bot = ctx.create_bot(base=Bot, adapter=adapter, auto_connect=False)
-        message = Message("乐土人律")
+        message = Message("/乐土人律")
         event = fake_group_message_event_v11(message=message)
 
         ctx.receive_event(bot, event)
