@@ -18,8 +18,7 @@ _✨ BH3 Elysian Realm bot power by NoneBot2 ✨_
 </a>
 <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="python">
 <img src="https://img.shields.io/badge/nonebot-2.0+-blue.svg" alt="nonebot">
-<img src="https://img.shields.io/codecov/c/github/balconyjh/nonebot_plugin_bh3_elysian_realm
-" alt="codecov">
+<img src="https://img.shields.io/codecov/c/github/balconyjh/nonebot_plugin_bh3_elysian_realm" alt="codecov">
 
 </div>
 

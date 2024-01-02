@@ -59,71 +59,7 @@ async def test_elysian_realm(app: App, mocker: MockerFixture):
         should_send_saa(
             ctx,
             MessageFactory(Image(Path(__file__).parent / "test_res" / "Human.jpg")),
-            # MessageFactory("未找到指定角色"),
             bot,
             event=event,
         )
         ctx.should_finished()
-
-
-# async def test_add_nickname_with_empty_cache(app: App, mocker: MockerFixture):
-#     from nonebot_plugin_bh3_elysian_realm.plugins import add_nickname
-#
-#     mocker.patch.object(get_driver().config, "superusers", {"10"})
-#
-#     async with app.test_matcher(add_nickname) as ctx:
-#         adapter = get_adapter(Adapter)
-#         bot = ctx.create_bot(base=Bot, adapter=adapter, auto_connect=False)
-#         message = Message("添加乐土昵称")
-#         event = fake_group_message_event_v11(message=message, sender={"role": "owner"})
-#
-#         ctx.receive_event(bot, event)
-#         ctx.should_call_send(event, "nickname.json不存在没有昵称的图片", True)
-#         ctx.should_finished()
-#
-#
-# async def test_add_nickname_with_existing_filename(app: App, mocker: MockerFixture):
-#     from nonebot_plugin_bh3_elysian_realm.plugins import add_nickname
-#
-#     mocker.patch.object(get_driver().config, "superusers", {"10"})
-#
-#     async with app.test_matcher(add_nickname) as ctx:
-#         adapter = get_adapter(Adapter)
-#         bot = ctx.create_bot(base=Bot, adapter=adapter, auto_connect=False)
-#         message = Message("添加乐土昵称")
-#         event = fake_group_message_event_v11(message=message, sender={"role": "owner"})
-#
-#         mocker.patch.object(get_driver().config, "superusers", {"10"})
-#
-#         ctx.receive_event(bot, event)
-#         should_send_saa(
-#             ctx,
-#             MessageFactory("nickname.json不存在没有昵称的图片"),
-#             bot,
-#             event=event,
-#         )
-#         ctx.should_finished()
-#
-#
-# async def test_add_nickname_with_non_existing_filename(app: App, mocker: MockerFixture):
-#     from nonebot_plugin_bh3_elysian_realm.plugins import add_nickname
-#
-#     mocker.patch.object(get_driver().config, "superusers", {"10"})
-#
-#     mock_nickname_cache = {"Sentience_HoeFlow": []}
-#     mocker.patch("nonebot_plugin_bh3_elysian_realm.utils.load_json", return_value=mock_nickname_cache)
-#     async with app.test_matcher(add_nickname) as ctx:
-#         adapter = get_adapter(Adapter)
-#         bot = ctx.create_bot(base=Bot, adapter=adapter, auto_connect=False)
-#         message = Message("添加乐土昵称")
-#         event = fake_group_message_event_v11(message=message, sender={"role": "owner"})
-#
-#         ctx.receive_event(bot, event)
-#         should_send_saa(
-#             ctx,
-#             MessageFactory("nickname.json空值列表: ['Sentience_HoeFlow']\n以上为没有昵称的图片文件名"),
-#             bot,
-#             event=event,
-#         )
-#         ctx.should_call_send(event, "未找到图片文件: filename", True)
-#         ctx.should_finished()
