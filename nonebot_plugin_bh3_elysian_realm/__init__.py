@@ -18,7 +18,8 @@ __plugin_meta__ = PluginMetadata(
     type="application",
     usage="""
     [乐土XX] 指定角色乐土攻略
-    [乐土更新] 更新乐土攻略
+    [乐土更新] 更新乐土攻略图片资源
+    [添加乐土昵称] 添加乐土角色昵称
     """.strip(),
     extra={
         "author": "BalconyJH <balconyjh@gmail.com>",
