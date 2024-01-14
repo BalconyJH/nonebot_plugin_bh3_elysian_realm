@@ -9,6 +9,8 @@ class Config(BaseSettings, extra=Extra.ignore):
     image_path: Path = Path(__file__).parent / "resources" / "images"
     image_repository: str = "https://github.com/MskTmi/ElysianRealm-Data"
     resource_validation_time: int = 60 * 60 * 24
+    proxies: str = None
+    log_level: str = "INFO"
 
 
 global_config = get_driver().config
