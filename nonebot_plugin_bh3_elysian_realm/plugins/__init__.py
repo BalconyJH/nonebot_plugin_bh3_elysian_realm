@@ -10,14 +10,8 @@ from nonebot.permission import SUPERUSER
 from nonebot.internal.params import ArgPlainText
 
 from nonebot_plugin_bh3_elysian_realm.config import plugin_config
-from nonebot_plugin_bh3_elysian_realm.utils import (
-    git_pull,
-    load_json,
-    save_json,
-    string_to_list,
-    find_key_by_value,
-    identify_empty_value_keys,
-)
+from nonebot_plugin_bh3_elysian_realm.utils.file_utils import string_to_list, find_key_by_value
+from nonebot_plugin_bh3_elysian_realm.utils import git_pull, load_json, save_json, identify_empty_value_keys
 
 elysian_realm = on_command("乐土攻略", aliases={"乐土", "乐土攻略"}, priority=7)
 update_elysian_realm = on_command("乐土更新", aliases={"乐土更新"}, priority=7, permission=SUPERUSER)
@@ -42,7 +36,7 @@ async def got_introduction(role: str = ArgPlainText()):
 
 @update_elysian_realm.handle()
 async def _(matcher: Matcher, args: Message = CommandArg()):
-    await update_elysian_realm.finish("更新成功" if await git_pull() else "更新失败")
+    await update_elysian_realm.finish("更新成功" if await git_pull(plugin_config.image_path) else "更新失败")
 
 
 @add_nickname.handle()
@@ -52,10 +46,10 @@ async def _handle_first_receive(state: T_State):
     if empty_value_list:
         logger.debug("nickname.json存在没有昵称的图片")
         msg_builder = saa.Text(f"nickname.json空值列表: {empty_value_list}\n以上为没有昵称的图片文件名")
-        await msg_builder.send()
     else:
         msg_builder = saa.Text("nickname.json不存在没有昵称的图片")
-        await msg_builder.send()
+
+    await msg_builder.send()
 
 
 @add_nickname.got("filename", prompt="图片文件名")
