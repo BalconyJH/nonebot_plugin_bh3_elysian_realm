@@ -4,10 +4,11 @@ require("nonebot_plugin_apscheduler")
 require("nonebot_plugin_localstore")
 require("nonebot_plugin_saa")
 
-from nonebot.plugin import PluginMetadata, inherit_supported_adapters  # noqa: F401
+from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
-from nonebot_plugin_bh3_elysian_realm.utils import on_startup  # noqa: F401
+from nonebot_plugin_bh3_elysian_realm.utils import on_startup
 
+from .config import plugin_config
 from . import plugins  # noqa: F401
 
 driver = get_driver()
@@ -31,4 +32,6 @@ __plugin_meta__ = PluginMetadata(
 @driver.on_startup
 async def _():
     """启动前检查"""
+    if plugin_config.log_level == "DEBUG":
+        return
     await on_startup()
