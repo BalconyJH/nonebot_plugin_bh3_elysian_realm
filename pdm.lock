@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:0644e692de70ec14cd4dba80eb7a4dd8b40bc7a3467104626765a481fc8b2c43"
+content_hash = "sha256:5dde033e33775f353ab97c5357b18e97e78a675770ea002bfa59a4f70767484c"
 
 [[package]]
 name = "anyio"
@@ -1338,19 +1338,6 @@ summary = "A pure Python trie data structure implementation."
 files = [
     {file = "pygtrie-2.5.0-py3-none-any.whl", hash = "sha256:8795cda8105493d5ae159a5bef313ff13156c5d4d72feddefacaad59f8c8ce16"},
     {file = "pygtrie-2.5.0.tar.gz", hash = "sha256:203514ad826eb403dab1d2e2ddd034e0d1534bbe4dbe0213bb0593f66beba4e2"},
-]
-
-[[package]]
-name = "pyright"
-version = "1.1.341"
-requires_python = ">=3.7"
-summary = "Command line wrapper for pyright"
-dependencies = [
-    "nodeenv>=1.6.0",
-]
-files = [
-    {file = "pyright-1.1.341-py3-none-any.whl", hash = "sha256:f5800daf9d5780ebf6c6e04064a6d20da99c0ef16efd77526f83cc8d8551ff9f"},
-    {file = "pyright-1.1.341.tar.gz", hash = "sha256:b891721f3abd10635cc4fd3076bcff5b7676567dc3a629997ed59a0d30034a87"},
 ]
 
 [[package]]

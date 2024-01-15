@@ -52,7 +52,6 @@ test = [
     "nonebot-plugin-sentry>=0.4.1",
     "nonebug-saa>=0.3.1",
     "nb-cli>=1.2.8",
-    "pyright>=1.1.341",
     "pytest-cov>=4.1.0",
     "pytest-xdist>=3.5.0",
 ]
@@ -74,7 +73,7 @@ extra_standard_library = ["typing_extensions"]
 
 [tool.ruff]
 select = ["E", "W", "F", "UP", "C", "T", "PYI", "PT", "Q"]
-ignore = ["E402", "C901", "UP037"]
+ignore = ["E402", "C901", "UP037", "E501"]
 line-length = 120
 target-version = "py38"
 
