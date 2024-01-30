@@ -117,6 +117,8 @@ Code: AGPL-3.0 - 2023 - BalconyJH
 
 ### 插件依赖 [Bh3-ElysianRealm-Strategy](https://github.com/MskTmi/Bh3-ElysianRealm-Strategy) 提供灵感来源。
 
+### 插件框架 [NoneBot2](https://github.com/nonebot/nonebot2) 提供插件开发框架。
+
 感谢以下开发者作出的贡献：
 
 <a href="https://github.com/BalconyJH/nonebot_plugin_bh3_elysian_realm/graphs/contributors">
