@@ -2,11 +2,11 @@ from typing import List
 from pathlib import Path
 
 import nonebot_plugin_saa as saa
-from nonebot import logger, get_bot
 from nonebot_plugin_saa import TargetQQPrivate
+from nonebot import logger, get_bot, get_driver
 from nonebot_plugin_apscheduler import scheduler
 
-from nonebot_plugin_bh3_elysian_realm.config import global_config, plugin_config
+from nonebot_plugin_bh3_elysian_realm.config import plugin_config
 from nonebot_plugin_bh3_elysian_realm.utils.git_utils import git_pull, git_clone, contrast_repository_url
 from nonebot_plugin_bh3_elysian_realm.utils.file_utils import (
     check_url,
@@ -69,8 +69,8 @@ async def null_nickname_warning():
     if empty_value_list:
         bot = get_bot()
         msg_builder = saa.Text(f"{empty_value_list}缺失昵称，请及时更新")
-        logger.debug(f"superusers: {global_config.superusers}")
-        for superuser in global_config.superusers:
+        logger.debug(f"superusers: {get_driver().config.superusers}")
+        for superuser in get_driver().config.superusers:
             msg_target = TargetQQPrivate(user_id=int(superuser))
             await msg_builder.send_to(msg_target, bot)
 

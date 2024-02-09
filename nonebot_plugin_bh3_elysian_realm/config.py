@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from nonebot import get_driver
+from nonebot import get_plugin_config
 from pydantic import Extra, BaseSettings
 
 
@@ -13,5 +13,4 @@ class Config(BaseSettings, extra=Extra.ignore):
     log_level: str = "INFO"
 
 
-global_config = get_driver().config
-plugin_config = Config.parse_obj(global_config)
+plugin_config = get_plugin_config(Config)
