@@ -22,6 +22,9 @@ _✨ BH3 Elysian Realm bot power by NoneBot2 ✨_
 
 </div>
 
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm?ref=badge_large)
+
 ## 📖 介绍
 
 崩坏3乐土攻略插件
@@ -94,6 +97,7 @@ _✨ BH3 Elysian Realm bot power by NoneBot2 ✨_
 #### 乐土攻略
 
 ![乐土攻略](/document/images/1.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm?ref=badge_shield)
 
 #### 乐土更新
 
