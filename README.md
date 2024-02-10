@@ -22,7 +22,6 @@ _✨ BH3 Elysian Realm bot power by NoneBot2 ✨_
 
 </div>
 
-
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm?ref=badge_large)
 
 ## 📖 介绍
