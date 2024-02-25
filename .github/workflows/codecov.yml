@@ -5,7 +5,13 @@ on:
     branches:
       - "main"
       - "master"
+    paths:
+      - "nonebot_plugin_bh3_elysian_realm/**/*"
+      - "tests/**/*"
   pull_request:
+    paths:
+      - "nonebot_plugin_bh3_elysian_realm/**/*"
+      - "tests/**/*"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
