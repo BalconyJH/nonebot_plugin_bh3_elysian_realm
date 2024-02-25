@@ -1,25 +1,21 @@
-<div align="center">
+<div style="text-align: center;">
   <a href="https://v2.nonebot.dev/store"><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/nbp_logo.png" width="180" height="180" alt="NoneBotPluginLogo"></a>
   <br>
   <p><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/NoneBotPlugin.svg" width="240" alt="NoneBotPluginText"></p>
 </div>
 
-<div align="center">
+<div style="text-align: center;">
 
 # nonebot_plugin_bh3_elysian_realm
 
 _✨ BH3 Elysian Realm bot power by NoneBot2 ✨_
 
-<a href="./LICENSE">
-    <img src="https://img.shields.io/github/license/BalconyJH/nonebot_plugin_bh3_elysian_realm.svg" alt="license">
-</a>
-<a href="https://pypi.python.org/pypi/nonebot_plugin_bh3_elysian_realm">
-    <img src="https://img.shields.io/pypi/v/nonebot_plugin_bh3_elysian_realm.svg" alt="pypi">
-</a>
+<img src="https://img.shields.io/github/license/BalconyJH/nonebot_plugin_bh3_elysian_realm.svg" alt="license">
+<img src="https://img.shields.io/pypi/v/nonebot_plugin_bh3_elysian_realm.svg" alt="pypi">
 <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="python">
 <img src="https://img.shields.io/badge/nonebot-2.0+-blue.svg" alt="nonebot">
 <img src="https://img.shields.io/codecov/c/github/balconyjh/nonebot_plugin_bh3_elysian_realm" alt="codecov">
-
+<img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=shield" alt="license_scan">
 </div>
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm?ref=badge_large)
@@ -96,7 +92,6 @@ _✨ BH3 Elysian Realm bot power by NoneBot2 ✨_
 #### 乐土攻略
 
 ![乐土攻略](/document/images/1.png)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm?ref=badge_shield)
 
 #### 乐土更新
 
