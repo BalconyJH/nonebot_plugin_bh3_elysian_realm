@@ -1,10 +1,10 @@
-<div style="text-align: center;">
+<div align="center">
   <a href="https://v2.nonebot.dev/store"><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/nbp_logo.png" width="180" height="180" alt="NoneBotPluginLogo"></a>
   <br>
   <p><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/NoneBotPlugin.svg" width="240" alt="NoneBotPluginText"></p>
 </div>
 
-<div style="text-align: center;">
+<div align="center">
 
 # nonebot_plugin_bh3_elysian_realm
 
@@ -17,8 +17,6 @@ _✨ BH3 Elysian Realm bot power by NoneBot2 ✨_
 <img src="https://img.shields.io/codecov/c/github/balconyjh/nonebot_plugin_bh3_elysian_realm" alt="codecov">
 <img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=shield" alt="license_scan">
 </div>
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FBalconyJH%2Fnonebot_plugin_bh3_elysian_realm?ref=badge_large)
 
 ## 📖 介绍
 
