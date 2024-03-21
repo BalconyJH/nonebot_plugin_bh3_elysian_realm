@@ -53,6 +53,17 @@ class TestSaveJsonFiles(unittest.TestCase):
         with pytest.raises(FileNotFoundError):
             save_json(path, {})
 
+    async def test_illegal_dict(self):
+        from nonebot_plugin_bh3_elysian_realm.utils.file_utils import save_json
+
+        with NamedTemporaryFile(suffix=".json") as tmp_file:
+            path = Path(tmp_file.name)
+            with pytest.raises(
+                expected_exception=TypeError,
+                match="Serialization error",
+            ):
+                save_json(path, "test")  # type: ignore
+
 
 class TestListJpgFiles(unittest.TestCase):
     def test_list_jpg_files(self):

@@ -22,13 +22,20 @@ def load_json(json_file: Path) -> Dict:
 
 
 def save_json(json_file, data: Dict) -> None:
+    """
+    保存字典到指定的 JSON 文件。
+    :param json_file: JSON 文件路径
+    :param data: 要保存的数据
+    :return: None
+    """
     if not json_file.exists():
         raise FileNotFoundError(f"文件 {json_file} 不存在。")
     try:
         with json_file.open("w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
     except ValueError as e:
-        logger.error(f"保存文件 {json_file} 时遇到无法序列化错误: {e}")
+        logger.exception(f"保存文件 {json_file} 时遇到无法序列化错误: {e}")
+        raise ValueError("Serialization error") from e
 
 
 def list_jpg_files(directory: Union[str, Path]) -> List[str]:
