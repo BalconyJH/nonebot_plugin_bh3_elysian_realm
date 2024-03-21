@@ -27,8 +27,8 @@ def save_json(json_file, data: Dict) -> None:
     try:
         with json_file.open("w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
-    except json.JSONDecodeError:
-        logger.error(f"文件 {json_file} 解码错误。")
+    except ValueError as e:
+        logger.error(f"保存文件 {json_file} 时遇到无法序列化错误: {e}")
 
 
 def list_jpg_files(directory: Union[str, Path]) -> List[str]:
