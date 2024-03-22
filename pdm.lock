@@ -5,7 +5,17 @@
 groups = ["default", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:7400c51c75d961b08f668cc54a1163c4a323c8a3ab9f8105fe166764f2697372"
+content_hash = "sha256:c1396908e7763884a3dc5ea3e8de78c32e3b8b7ae05658dcb8e8620b2fc4b30f"
+
+[[package]]
+name = "aiofiles"
+version = "23.2.1"
+requires_python = ">=3.7"
+summary = "File support for asyncio."
+files = [
+    {file = "aiofiles-23.2.1-py3-none-any.whl", hash = "sha256:19297512c647d4b27a2cf7c34caa7e405c0d60b5560618a29a9fe027b18b0107"},
+    {file = "aiofiles-23.2.1.tar.gz", hash = "sha256:84ec2218d8419404abcb9f0c02df3f34c6e0a68ed41072acfb1cef5cbc29051a"},
+]
 
 [[package]]
 name = "anyio"
