@@ -1,30 +1,35 @@
+import json
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 from tempfile import NamedTemporaryFile
 
 import pytest
 
 
+@pytest.mark.asyncio
 class TestLoadJsonFiles(unittest.TestCase):
-    def test_load_empty_file(self):
+    async def test_load_empty_file(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json
 
         with NamedTemporaryFile(delete=False, suffix=".json") as tmp_file:
             path = Path(tmp_file.name)
-            assert load_json(path) == {}
+            result = await load_json(path)
+            assert result == {}
 
-    def test_load_valid_json(self):
+    async def test_load_valid_json(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json
 
         file = Path(__file__).parent.parent / "test_res" / "test_nickname.json"
-        assert load_json(file) != {}
+        result = await load_json(file)
+        assert result != {}
 
-    def test_file_not_found(self):
+    async def test_file_not_found(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json
 
         path = Path("/path/to/non/existent/file.json")
-        result = load_json(path)
-        assert result == {}, "应当返回空字典当文件不存在"
+        with pytest.raises(expected_exception=FileNotFoundError, match="文件 .* 未找到。"):
+            await load_json(path)
 
 
 class TestSaveJsonFiles(unittest.TestCase):
@@ -49,9 +54,9 @@ class TestSaveJsonFiles(unittest.TestCase):
     def test_file_not_found(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import save_json
 
-        path = Path(__file__).parent / "test_res" / "test_nickname.json"
-        with pytest.raises(FileNotFoundError):
-            save_json(path, {})
+        file = Path(__file__)
+        with pytest.raises(expected_exception=FileNotFoundError, match="文件 .* 不存在或不是一个JSON文件。"):
+            save_json(file, {})
 
     async def test_illegal_dict(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import save_json
@@ -63,6 +68,30 @@ class TestSaveJsonFiles(unittest.TestCase):
                 match="Serialization error",
             ):
                 save_json(path, "test")  # type: ignore
+
+    async def test_save_json_value_error(self):
+        """
+        测试 save_json 函数在遇到无法序列化错误时的行为。
+        """
+        from nonebot import logger
+
+        from nonebot_plugin_bh3_elysian_realm.utils.file_utils import save_json
+
+        file = Path(__file__).parent.parent / "test_res" / "test_nickname.json"
+        file.touch()
+        data = {"some_data": "example"}
+
+        with patch.object(json, "dump", side_effect=ValueError("Serialization error")), pytest.raises(
+            ValueError, match="Serialization error"
+        ):
+            save_json(file, data)
+
+        with patch.object(logger, "exception") as mocked_logger_exception:
+            try:
+                save_json(file, data)
+            except ValueError:
+                pass
+            mocked_logger_exception.assert_called_once()
 
 
 class TestListJpgFiles(unittest.TestCase):

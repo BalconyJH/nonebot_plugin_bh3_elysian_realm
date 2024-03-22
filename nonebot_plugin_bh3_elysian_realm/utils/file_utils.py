@@ -4,21 +4,29 @@ from pathlib import Path
 from typing import Dict, List, Union, Optional
 
 import httpx
+import aiofiles
 from nonebot import logger
 
 
-def load_json(json_file: Path) -> Dict:
-    if not json_file.exists() or os.path.getsize(json_file) == 0:
-        logger.warning(f"文件 {json_file} 为空或不存在。")
+async def load_json(json_file: Path) -> Dict:
+    """
+    从指定的 JSON 文件中加载数据。
+    :param json_file: JSON 文件路径
+    :return: JSON 数据
+    """
+    if not json_file.exists():
+        logger.error(f"文件 {json_file} 未找到。")
+        raise FileNotFoundError(f"文件 {json_file} 未找到。")
+    if json_file.stat().st_size == 0:
+        logger.warning(f"文件 {json_file} 为空。")
         return {}
     try:
-        with json_file.open("r", encoding="utf-8") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        logger.error(f"文件 {json_file} 未找到。")
-    except json.JSONDecodeError:
-        logger.error(f"文件 {json_file} 解码错误。")
-    raise FileNotFoundError
+        async with aiofiles.open(json_file, mode="r", encoding="utf-8") as file:
+            content = await file.read()
+            return json.loads(content)
+    except json.JSONDecodeError as e:
+        logger.error(f"文件 {json_file} 解码错误：{e}")
+        raise ValueError(f"文件 {json_file} 解码错误。") from e
 
 
 def save_json(json_file, data: Dict) -> None:
@@ -28,8 +36,8 @@ def save_json(json_file, data: Dict) -> None:
     :param data: 要保存的数据
     :return: None
     """
-    if not json_file.exists():
-        raise FileNotFoundError(f"文件 {json_file} 不存在。")
+    if not json_file.exists() or json_file.suffix != ".json":
+        raise FileNotFoundError(f"文件 {json_file} 不存在或不是一个JSON文件。")
     try:
         with json_file.open("w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
