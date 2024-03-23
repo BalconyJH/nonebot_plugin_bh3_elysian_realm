@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pytest
 from nonebug import App
 from pytest_mock import MockerFixture
 from nonebug_saa import should_send_saa
@@ -10,6 +11,7 @@ from nonebot.adapters.onebot.v11 import Bot, Adapter, Message
 from .utils import fake_group_message_event_v11
 
 
+@pytest.mark.asyncio
 async def test_update_elysian_realm(app: App, mocker: MockerFixture):
     from nonebot_plugin_bh3_elysian_realm.plugins import update_elysian_realm
 
@@ -26,6 +28,7 @@ async def test_update_elysian_realm(app: App, mocker: MockerFixture):
         ctx.should_finished()
 
 
+@pytest.mark.asyncio
 async def test_none_nickname(app: App, mocker: MockerFixture):
     from nonebot_plugin_bh3_elysian_realm.plugins import elysian_realm, plugin_config
 
@@ -45,6 +48,7 @@ async def test_none_nickname(app: App, mocker: MockerFixture):
         ctx.should_finished()
 
 
+@pytest.mark.asyncio
 async def test_elysian_realm(app: App, mocker: MockerFixture):
     from nonebot_plugin_bh3_elysian_realm.plugins import elysian_realm, plugin_config
 

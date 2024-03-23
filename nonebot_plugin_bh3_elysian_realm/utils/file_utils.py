@@ -41,9 +41,8 @@ def save_json(json_file, data: Dict) -> None:
     try:
         with json_file.open("w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
-    except ValueError as e:
-        logger.exception(f"保存文件 {json_file} 时遇到无法序列化错误: {e}")
-        raise ValueError("Serialization error") from e
+    except TypeError as e:
+        raise TypeError("Serialization error") from e
 
 
 def list_jpg_files(directory: Union[str, Path]) -> List[str]:
