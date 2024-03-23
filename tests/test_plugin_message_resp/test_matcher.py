@@ -29,8 +29,10 @@ async def test_update_elysian_realm(app: App, mocker: MockerFixture):
 async def test_none_nickname(app: App, mocker: MockerFixture):
     from nonebot_plugin_bh3_elysian_realm.plugins import elysian_realm, plugin_config
 
-    mocker.patch.object(plugin_config, "image_path", Path(Path(__file__).parent / "test_res"))
-    mocker.patch.object(plugin_config, "nickname_path", Path(Path(__file__).parent / "test_res" / "test_nickname.json"))
+    mocker.patch.object(plugin_config, "image_path", Path(Path(__file__).parent.parent / "test_res"))
+    mocker.patch.object(
+        plugin_config, "nickname_path", Path(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
+    )
 
     async with app.test_matcher(elysian_realm) as ctx:
         adapter = get_adapter(Adapter)

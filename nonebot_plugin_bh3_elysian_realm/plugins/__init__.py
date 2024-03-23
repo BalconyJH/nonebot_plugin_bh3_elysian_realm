@@ -26,7 +26,7 @@ async def handle_first_receive(matcher: Matcher, args: Message = CommandArg()):
 
 @elysian_realm.got("role", prompt="请指定角色")
 async def got_introduction(role: str = ArgPlainText()):
-    nickname = await find_key_by_value(load_json(plugin_config.nickname_path), role)
+    nickname = await find_key_by_value(await load_json(plugin_config.nickname_path), role)
     if nickname is None:
         await elysian_realm.finish(f"未找到指定角色: {role}")
     else:
@@ -41,7 +41,7 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
 
 @add_nickname.handle()
 async def _handle_first_receive(state: T_State):
-    state["nickname_cache"] = load_json(plugin_config.nickname_path)
+    state["nickname_cache"] = await load_json(plugin_config.nickname_path)
     empty_value_list = await identify_empty_value_keys(state["nickname_cache"])
     if empty_value_list:
         logger.debug("nickname.json存在没有昵称的图片")

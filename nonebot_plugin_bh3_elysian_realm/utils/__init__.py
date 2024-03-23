@@ -25,9 +25,15 @@ class ResourcesVerify:
     nickname_path: Path = plugin_config.nickname_path
     """资源检查类"""
 
-    def __init__(self):
-        self.jpg_list = list_jpg_files(self.image_path)
-        self.nickname_cache = load_json(self.nickname_path)
+    def __init__(self, jpg_list, nickname_cache):
+        self.jpg_list = jpg_list
+        self.nickname_cache = nickname_cache
+
+    @classmethod
+    async def create(cls):
+        jpg_list = list_jpg_files(plugin_config.image_path)
+        nickname_cache = await load_json(plugin_config.nickname_path)
+        return cls(jpg_list, nickname_cache)
 
     async def verify_nickname(self):
         """检查nickname.json是否存在"""
@@ -59,13 +65,14 @@ class ResourcesVerify:
 async def resource_scheduled_job():
     logger.debug("开始检查图片资源计划任务")
     await git_pull(plugin_config.image_path)
-    await ResourcesVerify().verify_nickname()
+    resources_verify = await ResourcesVerify.create()
+    await resources_verify.verify_images()
 
 
 @scheduler.scheduled_job("interval", seconds=plugin_config.resource_validation_time, id="null_nickname_warning")
 async def null_nickname_warning():
     logger.debug("开始检查nickname.json空值计划任务")
-    empty_value_list = await identify_empty_value_keys(load_json(plugin_config.nickname_path))
+    empty_value_list = await identify_empty_value_keys(await load_json(plugin_config.nickname_path))
     if empty_value_list:
         bot = get_bot()
         msg_builder = saa.Text(f"{empty_value_list}缺失昵称，请及时更新")
@@ -78,8 +85,9 @@ async def null_nickname_warning():
 async def on_startup():
     """启动前检查"""
     await check_url(plugin_config.image_repository, plugin_config.proxies)
-    await ResourcesVerify().verify_images()
-    await ResourcesVerify().verify_nickname()
-    _list = await identify_empty_value_keys(load_json(plugin_config.nickname_path))
+    resources_verify = await ResourcesVerify.create()
+    await resources_verify.verify_images()
+    await resources_verify.verify_nickname()
+    _list = await identify_empty_value_keys(await load_json(plugin_config.nickname_path))
     if _list:
         logger.warning(f"{_list}缺失昵称，请及时更新")

@@ -32,20 +32,21 @@ class TestLoadJsonFiles(unittest.TestCase):
             await load_json(path)
 
 
+@pytest.mark.asyncio
 class TestSaveJsonFiles(unittest.TestCase):
-    def test_save_empty_dict(self):
+    async def test_save_empty_dict(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json, save_json
 
         with NamedTemporaryFile(delete=False, suffix=".json") as tmp_file:
             path = Path(tmp_file.name)
             save_json(path, {})
-            assert load_json(path) == {}
+            assert await load_json(path) == {}
 
-    def test_save_valid_json(self):
+    async def test_save_valid_json(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json, save_json
 
         file = Path(__file__).parent.parent / "test_res" / "test_nickname.json"
-        data = load_json(file)
+        data = await load_json(file)
         with NamedTemporaryFile(delete=False, suffix=".json") as tmp_file:
             path = Path(tmp_file.name)
             save_json(path, data)
@@ -116,11 +117,12 @@ class TestStringToList(unittest.TestCase):
         assert string_to_list(" ") == []
 
 
+@pytest.mark.asyncio
 class TestFindKeyByValue(unittest.TestCase):
     async def test_find_key_by_value(self):
         from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json, find_key_by_value
 
-        data = load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
+        data = await load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
         assert await find_key_by_value(data, "人律") == "Human"
         assert await find_key_by_value(data, "人人") is None
 
@@ -129,7 +131,7 @@ class TestFindKeyByValue(unittest.TestCase):
 async def test_identify_empty_value_keys():
     from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json, identify_empty_value_keys
 
-    data = load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
+    data = await load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
     assert await identify_empty_value_keys(data) == ["Vicissitude_Attack"]
 
 
@@ -137,7 +139,7 @@ async def test_identify_empty_value_keys():
 async def test_list_all_keys():
     from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json, list_all_keys
 
-    data = load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
+    data = await load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
     assert await list_all_keys(data) == [
         "Human",
         "CosmicExpression_Mixed",
@@ -149,7 +151,7 @@ async def test_list_all_keys():
 async def test_merge_dicts():
     from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json, merge_dicts
 
-    data = load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
+    data = await load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
     assert await merge_dicts(data, {"test": ["test"]}) == {
         "Human": ["人律", "爱律"],
         "Vicissitude_Attack": [],
@@ -162,7 +164,7 @@ async def test_merge_dicts():
 async def test_merge_dicts_with_update():
     from nonebot_plugin_bh3_elysian_realm.utils.file_utils import load_json, merge_dicts
 
-    data = load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
+    data = await load_json(Path(__file__).parent.parent / "test_res" / "test_nickname.json")
     assert await merge_dicts(data, {"Human": ["老婆"]}) == {
         "Human": ["老婆"],
         "Vicissitude_Attack": [],
