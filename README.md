@@ -129,6 +129,8 @@ Code: AGPL-3.0 - 2023 - BalconyJH
 
 #### 插件框架 [NoneBot2](https://github.com/nonebot/nonebot2) 提供插件开发框架。
 
+<p align="center">
 <a href="https://github.com/BalconyJH/nonebot_plugin_bh3_elysian_realm/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=BalconyJH/nonebot_plugin_bh3_elysian_realm" />
+  <img src="https://contrib.rocks/image?repo=BalconyJH/nonebot_plugin_bh3_elysian_realm" alt="devlist"/>
 </a>
+</p>
