@@ -109,13 +109,25 @@ Code: AGPL-3.0 - 2023 - BalconyJH
 
 ## 🪜 鸣谢
 
-### 插件依赖 [ElysianRealm-Data](https://github.com/MskTmi/ElysianRealm-Data) 提供攻略图片。
+### 赞助者
 
-### 插件依赖 [Bh3-ElysianRealm-Strategy](https://github.com/MskTmi/Bh3-ElysianRealm-Strategy) 提供灵感来源。
+感谢以下产品对 nonebot_plugin_bh3_elysian_realm 项目提供的赞助：
 
-### 插件框架 [NoneBot2](https://github.com/nonebot/nonebot2) 提供插件开发框架。
+<p align="center">
+  <a href="https://www.jetbrains.com/">
+    <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" height="80" alt="JetBrains" >
+  </a>
+</p>
+
+### 开发者
 
 感谢以下开发者作出的贡献：
+
+#### 插件依赖 [ElysianRealm-Data](https://github.com/MskTmi/ElysianRealm-Data) 提供攻略图片。
+
+#### 插件依赖 [Bh3-ElysianRealm-Strategy](https://github.com/MskTmi/Bh3-ElysianRealm-Strategy) 提供灵感来源。
+
+#### 插件框架 [NoneBot2](https://github.com/nonebot/nonebot2) 提供插件开发框架。
 
 <a href="https://github.com/BalconyJH/nonebot_plugin_bh3_elysian_realm/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=BalconyJH/nonebot_plugin_bh3_elysian_realm" />
