@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 from nonebot import get_plugin_config
 from pydantic import Extra, BaseSettings
@@ -9,7 +10,7 @@ class Config(BaseSettings, extra=Extra.ignore):
     image_path: Path = Path(__file__).parent / "resources" / "images"
     image_repository: str = "https://github.com/MskTmi/ElysianRealm-Data"
     resource_validation_time: int = 60 * 60 * 24
-    proxies: str = None
+    proxies: Optional[str] = None
     log_level: str = "INFO"
 
 
