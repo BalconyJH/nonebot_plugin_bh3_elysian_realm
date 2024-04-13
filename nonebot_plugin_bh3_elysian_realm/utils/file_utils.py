@@ -121,7 +121,7 @@ async def merge_dicts(raw_data: Dict, update_data: Dict) -> Dict:
 
 async def check_url(url: str, proxy_url: Optional[str]) -> bool:
     try:
-        proxies = {"all://": proxy_url} if proxy_url else None
+        proxies = httpx.Proxy(url=proxy_url) if proxy_url else None
         with httpx.Client(proxies=proxies, timeout=5) as client:
             response = client.head(url)
             return response.status_code == 200
