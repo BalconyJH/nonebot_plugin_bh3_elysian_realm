@@ -1,17 +1,28 @@
 import os
 import re
-import subprocess
+import asyncio
 from pathlib import Path
 from typing import Union
 
 from tqdm import tqdm
 from nonebot import logger
 
-from nonebot_plugin_bh3_elysian_realm.config import plugin_config
+
+def update_progress(stderr_lines):
+    """更新克隆或拉取资源的进度条"""
+    with tqdm(desc="更新中") as pbar:
+        for line in stderr_lines:
+            logger.debug(line)
+            speed_match = re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line)
+            if speed_match:
+                speed = speed_match.group(1)
+                pbar.set_postfix_str(f"下载速度: {speed}")
+            pbar.update()
 
 
 async def git_pull(image_path: Path) -> bool:
     clone_command = ["git", "pull"]
+    process = None
 
     if not os.path.exists(image_path):
         logger.error(f"目录 {image_path} 不存在")
@@ -19,56 +30,97 @@ async def git_pull(image_path: Path) -> bool:
 
     os.chdir(image_path)
 
+    # try:
+    #     with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
+    #         stdout, stderr = process.communicate()
+    #
+    #         if "Already up to date." in stdout:
+    #             logger.info("图片资源已是最新版本")
+    #         else:
+    #             logger.info("图片资源开始更新")
+    #             with tqdm(desc="更新中") as pbar:
+    #                 for line in stderr.splitlines():
+    #                     logger.debug(line)
+    #                     if speed_match := re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line):
+    #                         speed = speed_match[1]
+    #                         pbar.set_postfix_str(f"下载速度: {speed}")
+    #                     pbar.update()
+    #             logger.info("图片资源更新完成")
+    #
+    #         return True
+    # except subprocess.CalledProcessError:
+    #     logger.error("图片资源更新异常")
+    #     return False
     try:
-        with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
-            stdout, stderr = process.communicate()
+        process = await asyncio.create_subprocess_exec(
+            *clone_command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
 
-            if "Already up to date." in stdout:
-                logger.info("图片资源已是最新版本")
-            else:
-                logger.info("图片资源开始更新")
-                with tqdm(desc="更新中") as pbar:
-                    for line in stderr.splitlines():
-                        if speed_match := re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line):
-                            speed = speed_match[1]
-                            pbar.set_postfix_str(f"下载速度: {speed}")
-                        pbar.update()
-                logger.info("图片资源更新完成")
-            return True
-    except subprocess.CalledProcessError:
-        logger.error("图片资源更新异常")
+        stdout, stderr = await process.communicate()
+        stdout_lines = stdout.decode("utf-8").splitlines()
+        stderr_lines = stderr.decode("utf-8").splitlines()
+
+        if "Already up to date." in stdout_lines:
+            logger.info("图片资源已是最新版本")
+        else:
+            logger.info("图片资源开始更新")
+            update_progress(stderr_lines)
+            logger.info("图片资源更新完成")
+
+        await process.wait()
+        return True
+    except asyncio.CancelledError:
+        logger.error("图片资源更新被取消")
         return False
+    except Exception as e:
+        logger.error(f"图片资源更新异常: {e!s}")
+        return False
+    finally:
+        if process and process.returncode is None:
+            logger.info("终止未结束的子进程")
+            process.terminate()
+            await process.wait()
 
 
 async def git_clone(repository_url: str, image_path: Path) -> Union[bool, str]:
-    clone_command = ["git", "clone", "--progress", "--depth=1", repository_url, image_path]
+    clone_command = ["git", "clone", "--progress", "--depth=1", repository_url, str(image_path)]
+    process = None
+
+    if os.path.exists(image_path) and os.listdir(image_path):
+        logger.error(f"目录 {image_path} 不为空")
+        return False
+
+    if (image_path / ".gitkeep").exists():
+        os.remove(image_path / ".gitkeep")
 
     try:
-        if os.path.exists(image_path) and os.listdir(image_path):
-            logger.error(f"目录 {plugin_config.image_path} 不为空")
-            return False
-        if os.path.exists(image_path / ".gitkeep"):
-            os.remove(image_path / ".gitkeep")
-        with subprocess.Popen(clone_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
-            with tqdm(desc="克隆中") as pbar:
-                if process.stderr is not None:
-                    for line in process.stderr:
-                        if speed_match := re.search(r"\|\s*([\d.]+\s*[\w/]+/s)", line):
-                            speed = speed_match[1]
-                            pbar.set_postfix_str(f"下载速度: {speed}")
-                        pbar.update()
-                        if "done." in line:
-                            logger.info("乐土攻略获取完成")
-                            return True
+        process = await asyncio.create_subprocess_exec(
+            *clone_command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
 
-    except subprocess.CalledProcessError as e:
-        error_info = e.stderr
-        if "fatal: destination path" in error_info:
-            logger.warning(f"{error_info}\n{plugin_config.image_path}目录下已存在数据文件")
-        else:
-            logger.error(f"克隆异常:\n{error_info}")
+        stdout, stderr = await process.communicate()
+        # stdout_lines = stdout.decode("utf-8").splitlines()
+        stderr_lines = stderr.decode("utf-8").splitlines()
 
+        update_progress(stderr_lines)
+
+    except asyncio.CancelledError:
+        logger.error("克隆被取消")
         return False
+    except Exception as e:
+        logger.error(f"克隆异常: {e!s}")
+        return False
+    finally:
+        if process and process.returncode is None:
+            logger.info("终止未结束的子进程")
+            process.terminate()
+            await process.wait()
+
+    return False
 
 
 async def contrast_repository_url(repository_url: str, path: Path) -> bool:
@@ -93,21 +145,41 @@ async def contrast_repository_url(repository_url: str, path: Path) -> bool:
         如果指定目录不是 Git 仓库，或者 'git' 命令无法执行，函数将返回 False。
     """
     original_cwd = Path.cwd()
+    process = None
     try:
         os.chdir(path)
-        remote_url = (
-            subprocess.check_output(["git", "config", "--get", "remote.origin.url"], stderr=subprocess.STDOUT)
-            .strip()
-            .decode("utf-8")
+
+        # 异步执行 "git config --get remote.origin.url" 命令
+        process = await asyncio.create_subprocess_exec(
+            "git",
+            "config",
+            "--get",
+            "remote.origin.url",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
         )
-        if remote_url == repository_url:
-            logger.debug("指定仓库地址与目录下仓库地址匹配")
-            return True
+
+        stdout, stderr = await process.communicate()
+        remote_url = stdout.decode("utf-8").strip()
+
+        if process.returncode == 0:
+            if remote_url == repository_url:
+                logger.debug("指定仓库地址与目录下仓库地址匹配")
+                return True
+            else:
+                logger.debug(f"目录下仓库地址: {remote_url}")
+                logger.debug(f"指定仓库地址: {repository_url}")
+                return False
         else:
-            logger.debug(f"目录下仓库地址: {remote_url}")
-            logger.debug(f"指定仓库地址: {repository_url}")
+            logger.error(f"获取远程仓库地址时出错：{stderr.decode('utf-8').strip()}")
             return False
-    except subprocess.CalledProcessError:
+
+    except Exception as e:
+        logger.error(f"检查仓库地址时发生异常：{e}")
         return False
     finally:
         os.chdir(original_cwd)
+        if process and process.returncode is None:
+            logger.info("终止未结束的子进程")
+            process.terminate()
+            await process.wait()
