@@ -1,7 +1,6 @@
 import os
-import subprocess
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -14,7 +13,11 @@ class TestContrastRepositoryUrl:
         from nonebot_plugin_bh3_elysian_realm.utils import contrast_repository_url
 
         """测试当远程URL匹配时返回True"""
-        with patch("subprocess.check_output", return_value=b"https://example.com/repo.git\n"):
+        mock_process = AsyncMock()
+        mock_process.communicate = AsyncMock(return_value=(b"https://example.com/repo.git\n", b""))
+        mock_process.returncode = 0
+
+        with patch("asyncio.create_subprocess_exec", return_value=mock_process):
             result = await contrast_repository_url("https://example.com/repo.git", Path(os.getcwd()))
             assert result is True
 
@@ -23,7 +26,11 @@ class TestContrastRepositoryUrl:
         from nonebot_plugin_bh3_elysian_realm.utils import contrast_repository_url
 
         """测试当远程URL不匹配时返回False"""
-        with patch("subprocess.check_output", return_value=b"https://example.com/another_repo.git\n"):
+        mock_process = AsyncMock()
+        mock_process.communicate = AsyncMock(return_value=(b"https://another-repo.com/repo.git\n", b""))
+        mock_process.returncode = 0
+
+        with patch("asyncio.create_subprocess_exec", return_value=mock_process):
             result = await contrast_repository_url("https://example.com/repo.git", Path(os.getcwd()))
             assert result is False
 
@@ -32,6 +39,10 @@ class TestContrastRepositoryUrl:
         from nonebot_plugin_bh3_elysian_realm.utils import contrast_repository_url
 
         """测试执行Git命令出现异常时返回False"""
-        with patch("subprocess.check_output", side_effect=subprocess.CalledProcessError(1, ["git"])):
+        mock_process = AsyncMock()
+        mock_process.communicate = AsyncMock(return_value=(b"", b"fatal: not a git repository"))
+        mock_process.returncode = 1
+
+        with patch("asyncio.create_subprocess_exec", return_value=mock_process):
             result = await contrast_repository_url("https://example.com/repo.git", Path(os.getcwd()))
             assert result is False
